@@ -26,11 +26,14 @@ import (
 )
 
 const (
-	defaultSSHUser  = "docker"
-	defaultSSHPass  = "tcuser"
-	defaultDiskSize = 20000
-	defaultCPU      = 1
-	defaultMemory   = 1024
+	defaultSSHUser                    = "docker"
+	defaultSSHPass                    = "tcuser"
+	defaultDiskSize                   = 20000
+	defaultCPU                        = 1
+	defaultMemory                     = 1024
+	defaultEnableNestedVirtualization = true
+	defaultEnableCodeProfiling        = true
+	defaultEnableIOMMU                = true
 )
 
 // Config specifies the configuration of driver VMware
@@ -43,10 +46,13 @@ type Config struct {
 	ISO            string
 	Boot2DockerURL string
 
-	SSHPassword    string
-	ConfigDriveISO string
-	ConfigDriveURL string
-	NoShare        bool
+	SSHPassword                string
+	ConfigDriveISO             string
+	ConfigDriveURL             string
+	NoShare                    bool
+	EnableNestedVirtualization bool
+	EnableCodeProfiling        bool
+	EnableIOMMU                bool
 }
 
 // NewConfig creates a new Config
@@ -61,6 +67,9 @@ func NewConfig(hostname, storePath string) *Config {
 			MachineName: hostname,
 			StorePath:   storePath,
 		},
+		EnableNestedVirtualization: defaultEnableNestedVirtualization,
+		EnableCodeProfiling:        defaultEnableCodeProfiling,
+		EnableIOMMU:                defaultEnableIOMMU,
 	}
 }
 
@@ -114,6 +123,21 @@ func (c *Config) GetCreateFlags() []mcnflag.Flag {
 			EnvVar: "VMWARE_NO_SHARE",
 			Name:   "vmware-no-share",
 			Usage:  "Disable the mount of your home directory",
+		},
+		mcnflag.BoolFlag{
+			EnvVar: "VMWARE_ENABLE_NESTED_VIRTUALIZATION",
+			Name:   "vmware-enable-nested-virtualization",
+			Usage:  "Enable running modern virtualization applications",
+		},
+		mcnflag.BoolFlag{
+			EnvVar: "VMWARE_ENABLE_CODE_PROFILING",
+			Name:   "vmware-enable-code-profiling",
+			Usage:  "Enable running modern code profiling applications",
+		},
+		mcnflag.BoolFlag{
+			EnvVar: "VMWARE_ENABLE_IOMMU",
+			Name:   "vmware-enable-iommu",
+			Usage:  "Enable IOMMU",
 		},
 	}
 }

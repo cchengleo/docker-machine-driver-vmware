@@ -17,8 +17,8 @@ limitations under the License.
 package main
 
 import (
+	"github.com/cchengleo/docker-machine-driver-vmware/pkg/drivers/vmware"
 	"github.com/docker/machine/libmachine/drivers/plugin"
-	"github.com/machine-drivers/docker-machine-driver-vmware/pkg/drivers/vmware"
 )
 
 func main() {

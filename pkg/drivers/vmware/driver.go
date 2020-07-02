@@ -34,12 +34,12 @@ import (
 	"text/template"
 	"time"
 
+	"github.com/cchengleo/docker-machine-driver-vmware/pkg/drivers/vmware/config"
 	"github.com/docker/machine/libmachine/drivers"
 	"github.com/docker/machine/libmachine/log"
 	"github.com/docker/machine/libmachine/mcnutils"
 	"github.com/docker/machine/libmachine/ssh"
 	"github.com/docker/machine/libmachine/state"
-	"github.com/machine-drivers/docker-machine-driver-vmware/pkg/drivers/vmware/config"
 	cryptossh "golang.org/x/crypto/ssh"
 )
 
@@ -89,6 +89,15 @@ func (d *Driver) SetConfigFromFlags(flags drivers.DriverOptions) error {
 	d.SSHPassword = flags.String("vmware-ssh-password")
 	d.SSHPort = 22
 	d.NoShare = flags.Bool("vmware-no-share")
+	if !flags.Bool("vmware-enable-nested-virtualization") {
+		d.EnableNestedVirtualization = false
+	}
+	if !flags.Bool("vmware-enable-code-profiling") {
+		d.EnableCodeProfiling = false
+	}
+	if !flags.Bool("vmware-enable-iommu") {
+		d.EnableIOMMU = false
+	}
 
 	// We support a maximum of 16 cpu to be consistent with Virtual Hardware 10
 	// specs.
